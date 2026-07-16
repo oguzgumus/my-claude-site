@@ -712,7 +712,28 @@
       // re-seeds _view from stored before clamp/apply, so a shrink→grow
       // cycle round-trips instead of ratcheting x/y toward the narrower
       // frame's clamp range.
-      this._ro = new ResizeObserver(() => this._render());
+      this._ro = new ResizeObserver((entries) => {
+        // Read the box size from the observer entry itself — NOT
+        // getBoundingClientRect, which forces synchronous layout inside the
+        // callback and, with many filled slots sharing flex columns, lets
+        // each _render re-invalidate its siblings' boxes by a sub-pixel and
+        // re-fire the observers forever (a main-thread pin). Cache the
+        // rounded border-box size and bail before any style writes when it
+        // hasn't actually changed, so the cascade can't sustain itself.
+        const e = entries[entries.length - 1];
+        let w, h;
+        if (e.borderBoxSize && e.borderBoxSize.length) {
+          w = Math.round(e.borderBoxSize[0].inlineSize);
+          h = Math.round(e.borderBoxSize[0].blockSize);
+        } else {
+          w = Math.round(e.contentRect.width);
+          h = Math.round(e.contentRect.height);
+        }
+        const key = w + 'x' + h;
+        if (key === this._roLast) return;
+        this._roLast = key;
+        this._render();
+      });
       this._ro.observe(this);
       load();
       this._render();
