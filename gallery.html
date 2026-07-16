@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/classical-551c5c02-e75b-45bf-a77b-b9008c5821fb/styles.css">
+<script src="image-slot.js"></script>
+<style>
+  html,body{background:var(--color-bg);}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--space-8);}
+  a.navlink[aria-current]{color:var(--color-accent);}
+  .kicker{font-family:var(--font-body);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--color-accent-700);font-feature-settings:"tnum";}
+  .display{font-family:var(--font-heading);font-weight:400;line-height:.98;letter-spacing:-.02em;}
+  .justify{text-align:justify;hyphens:auto;}
+  .masonry{column-count:3;column-gap:var(--space-4);}
+  .masitem{break-inside:avoid;margin:0 0 var(--space-4);}
+  .lb-open{opacity:0;transition:opacity .15s ease;}
+  .masitem:hover .lb-open,.lb-open:focus-visible{opacity:1;}
+  .genre-nav{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+  .genre-nav a{font-size:13px;text-decoration:none;padding:4px 12px;border:1px solid var(--color-divider);border-radius:var(--radius-md);color:var(--color-text);}
+  .genre-nav a:hover{border-color:var(--color-accent);color:var(--color-accent-700);}
+  .genre-nav a[aria-current]{border-color:var(--color-accent);color:var(--color-accent-700);}
+  @media(max-width:820px){.masonry{column-count:2;}}
+  @media(max-width:520px){.masonry{column-count:1;}}
+</style>
+<script>
+(function(){
+  var DICT={
+    "Work":"İşler","Services":"Hizmetler","About":"Hakkımda","Contact":"İletişim",
+    "← All collections":"← Tüm koleksiyonlar","Next":"Sıradaki","Book a session":"Seans ayırt",
+    "Like what you see?":"Beğendiniz mi?","Let's make something like this together":"Birlikte böyle bir şey yapalım",
+    "Portraits":"Portreler","Travel & Landscape":"Seyahat ve Manzara","Fashion & Editorial":"Moda ve Editoryal",
+    "Weddings & Events":"Düğünler ve Etkinlikler","Architecture & Interiors":"Mimari ve İç Mekân","Street & Documentary":"Sokak ve Belgesel",
+    "People, honestly lit. Studio and natural light sittings where the aim is simple — that you look like yourself on a really good day.":"İnsanlar, dürüst ışıkla. Amaç basit olan stüdyo ve doğal ışık çekimleri — çok iyi bir gününüzde kendiniz gibi görünmeniz.",
+    "Cities, coasts and quiet corners across Europe and Türkiye — the light of a place and the feeling of being there.":"Avrupa ve Türkiye'deki şehirler, kıyılar ve sessiz köşeler — bir yerin ışığı ve orada olma hissi.",
+    "Stories told with a look. Lookbooks, campaigns and magazine work built around a clear idea and a strong frame.":"Bir bakışla anlatılan hikâyeler. Net bir fikir ve güçlü bir kare üzerine kurulu lookbook, kampanya ve dergi çalışmaları.",
+    "Days worth keeping, photographed unhurried and up close — the big moments and the small ones between them.":"Saklı tutulmaya değer günler, telasız ve yakından çekilir — büyük anlar ve arasındaki küçük olanlar.",
+    "Space and structure — hotels, homes and buildings shot for their proportion, texture and the way light moves through them.":"Mekân ve yapı — oranları, dokuları ve içlerinden geçen ışığın hareketi için çekilen oteller, evler ve binalar.",
+    "Life exactly as it happens. Personal and commissioned reportage from the streets of Barcelona, İstanbul and beyond.":"Hayat tam olarak olduğu gibi. Barselona, İstanbul ve ötesinin sokaklarından kişisel ve sipariş üzerine röportaj fotoğrafçılığı."
+  };
+  function isLeaf(el){for(var i=0;i<el.childNodes.length;i++){if(el.childNodes[i].nodeType===1)return false;}return true;}
+  function apply(lang){
+    document.documentElement.lang=lang;
+    document.querySelectorAll('h1,h2,h3,h4,h5,h6,p,a,span,label,button,td,figcaption,li').forEach(function(el){
+      if(el.hasAttribute('data-lang'))return;
+      if(!isLeaf(el))return;
+      var orig=el.getAttribute('data-en');
+      if(orig===null){orig=el.textContent.trim();if(!orig)return;el.setAttribute('data-en',orig);}
+      el.textContent=(lang==='tr'&&DICT[orig]!==undefined)?DICT[orig]:orig;
+    });
+    document.querySelectorAll('[data-lang]').forEach(function(b){if(b.getAttribute('data-lang')===lang)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+    try{localStorage.setItem('ozzy-lang',lang);}catch(e){}
+  }
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(b){e.preventDefault();apply(b.getAttribute('data-lang'));}});
+  function init(){var l='en';try{l=localStorage.getItem('ozzy-lang')||'en';}catch(e){}apply(l);}
+  [150,600,1400].forEach(function(t){setTimeout(init,t);});
+})();
+</script>
+<script>
+(function(){
+  var lb,img;
+  function open(src){lb=lb||document.getElementById('lightbox');if(!lb)return;img=img||lb.querySelector('.lb-img');img.src=src;lb.style.display='flex';document.body.style.overflow='hidden';}
+  function close(){if(lb){lb.style.display='none';document.body.style.overflow='';}}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('.lb-open');
+    if(b){e.preventDefault();var fig=b.closest('.masitem');var slot=fig&&fig.querySelector('image-slot');var s='';try{var im=slot&&slot.shadowRoot&&slot.shadowRoot.querySelector('img[part=image]');if(im&&im.getAttribute('src'))s=im.src;}catch(err){}if(s)open(s);return;}
+    if(e.target.closest&&e.target.closest('.lb-close')){close();return;}
+    if(e.target.classList&&e.target.classList.contains('lb-backdrop')){close();}
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+})();
+</script>
+</helmet>
+<div style="min-height:100%;padding-bottom:var(--space-8);">
+
+  <nav class="nav wrap" style="max-width:1180px;padding-top:var(--space-4);padding-bottom:var(--space-4);">
+    <a class="nav-brand" href="Portfolio-Classical.dc.html" style="letter-spacing:.01em;text-decoration:none;color:inherit;">Ozzy Gumush</a>
+    <a class="navlink" href="Portfolio-Classical.dc.html#work">Work</a>
+    <a class="navlink" href="Portfolio-Classical.dc.html#services">Services</a>
+    <a class="navlink" href="Portfolio-Classical.dc.html#about">About</a>
+    <a class="navlink" href="Portfolio-Classical.dc.html#contact">Contact</a>
+    <span style="display:inline-flex;gap:7px;align-items:center;font-size:12px;letter-spacing:.08em;"><a class="navlink" data-lang="en" href="#">EN</a><span class="text-muted">·</span><a class="navlink" data-lang="tr" href="#">TR</a></span>
+  </nav>
+
+  <header class="wrap" style="padding-top:var(--space-8);padding-bottom:var(--space-6);">
+    <a href="Portfolio-Classical.dc.html#work" class="btn btn-ghost" style="padding-inline:0;margin-bottom:var(--space-3);">← All collections</a>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;">
+      <div style="max-width:60%;">
+        <p class="kicker" style="margin:0 0 var(--space-3);">Portfolio — {{ index }} / 06</p>
+        <h1 class="display" style="font-size:64px;margin:0 0 var(--space-4);">{{ title }}</h1>
+        <p class="justify" style="font-size:16px;line-height:1.7;max-width:52ch;color:var(--color-neutral-800);margin:0;">{{ blurb }}</p>
+      </div>
+      <p class="text-muted" style="font-size:13px;margin:0;text-align:right;">{{ count }} frames<br>Barcelona · Europe · Türkiye</p>
+    </div>
+    <hr class="hr" style="margin-top:var(--space-6);">
+    <nav class="genre-nav">
+      <sc-for list="{{ genres }}" as="g" hint-placeholder-count="6">
+        <a href="?g={{ g.key }}" aria-current="{{ g.current }}">{{ g.label }}</a>
+      </sc-for>
+    </nav>
+  </header>
+
+  <section class="wrap" style="padding-top:var(--space-6);">
+    <div class="masonry">
+      <sc-for list="{{ items }}" as="it" hint-placeholder-count="9">
+        <figure class="masitem" style="position:relative;">
+          <div class="plate" style="aspect-ratio:{{ it.ar }};">
+            <image-slot id="{{ it.id }}" shape="rect" fit="cover" placeholder="{{ it.cap }}"></image-slot>
+          </div>
+          <button class="lb-open" type="button" aria-label="Expand photo" style="position:absolute;top:14px;right:14px;font-family:var(--font-heading);font-size:12px;letter-spacing:.04em;padding:5px 11px;color:var(--color-text);background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);cursor:pointer;box-shadow:var(--shadow-sm);">⤢ Expand</button>
+        </figure>
+      </sc-for>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:var(--space-8);">
+    <hr class="hr">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;padding-top:var(--space-4);">
+      <div>
+        <p class="kicker" style="margin:0 0 var(--space-2);">Next</p>
+        <h2 class="display" style="font-size:34px;margin:0;">{{ nextTitle }}</h2>
+      </div>
+      <a class="btn btn-secondary" href="?g={{ nextKey }}">View {{ nextTitle }} →</a>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:var(--space-8);">
+    <div class="card" style="padding:var(--space-8);text-align:center;align-items:center;">
+      <p class="kicker" style="margin:0 0 var(--space-2);">Like what you see?</p>
+      <h2 class="display" style="font-size:40px;margin:0 0 var(--space-4);max-width:20ch;">Let's make something like this together</h2>
+      <a class="btn btn-primary" href="Portfolio-Classical.dc.html#contact">Book a session</a>
+    </div>
+  </section>
+
+  <div class="lb-backdrop" id="lightbox" style="position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:36px;background:color-mix(in srgb, var(--color-neutral-900) 84%, transparent);">
+    <button class="lb-close" type="button" aria-label="Close" style="position:absolute;top:18px;right:26px;background:transparent;border:0;color:#fff;font-size:34px;line-height:1;cursor:pointer;">×</button>
+    <img class="lb-img" alt="" style="max-width:92vw;max-height:86vh;border:7px solid #fff;box-shadow:0 16px 50px rgba(0,0,0,.55);">
+  </div>
+
+  <footer class="wrap" style="padding-top:var(--space-8);margin-top:var(--space-8);border-top:1px solid var(--color-divider);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-3);padding-bottom:var(--space-4);">
+    <a class="nav-brand" href="Portfolio-Classical.dc.html" style="font-size:16px;text-decoration:none;color:inherit;">Ozzy Gumush</a>
+    <span class="text-muted" style="font-size:13px;">© 2026 Oğuzhan Gümüş · Barcelona · Photography</span>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const DATA = [
+      { key: "portraits",    label: "Portraits",              title: "Portraits",              blurb: "People, honestly lit. Studio and natural light sittings where the aim is simple — that you look like yourself on a really good day.", ars: ["4 / 5","1 / 1","3 / 4","4 / 5","1 / 1","5 / 4","3 / 4","4 / 5","1 / 1"] },
+      { key: "travel",       label: "Travel & Landscape",     title: "Travel & Landscape",     blurb: "Cities, coasts and quiet corners across Europe and Türkiye — the light of a place and the feeling of being there.", ars: ["3 / 2","4 / 5","3 / 2","1 / 1","3 / 4","3 / 2","4 / 5","3 / 2","1 / 1"] },
+      { key: "fashion",      label: "Fashion & Editorial",    title: "Fashion & Editorial",    blurb: "Stories told with a look. Lookbooks, campaigns and magazine work built around a clear idea and a strong frame.", ars: ["4 / 5","3 / 4","4 / 5","1 / 1","3 / 4","4 / 5","5 / 4","3 / 4","4 / 5"] },
+      { key: "weddings",     label: "Weddings & Events",      title: "Weddings & Events",      blurb: "Days worth keeping, photographed unhurried and up close — the big moments and the small ones between them.", ars: ["3 / 2","4 / 5","1 / 1","3 / 4","3 / 2","4 / 5","3 / 2","1 / 1","3 / 4"] },
+      { key: "architecture", label: "Architecture & Interiors", title: "Architecture & Interiors", blurb: "Space and structure — hotels, homes and buildings shot for their proportion, texture and the way light moves through them.", ars: ["3 / 2","3 / 4","4 / 5","3 / 2","1 / 1","3 / 2","4 / 5","3 / 4","3 / 2"] },
+      { key: "street",       label: "Street & Documentary",   title: "Street & Documentary",   blurb: "Life exactly as it happens. Personal and commissioned reportage from the streets of Barcelona, İstanbul and beyond.", ars: ["3 / 2","1 / 1","4 / 5","3 / 2","3 / 4","1 / 1","3 / 2","4 / 5","3 / 2"] },
+    ];
+    let key = "portraits";
+    try { key = new URLSearchParams(location.search).get("g") || "portraits"; } catch (e) {}
+    let idx = DATA.findIndex(d => d.key === key);
+    if (idx < 0) idx = 0;
+    const cur = DATA[idx];
+    const next = DATA[(idx + 1) % DATA.length];
+    return {
+      title: cur.title,
+      blurb: cur.blurb,
+      index: String(idx + 1).padStart(2, "0"),
+      count: cur.ars.length,
+      genres: DATA.map(d => ({ key: d.key, label: d.label, current: d.key === cur.key ? "page" : undefined })),
+      items: cur.ars.map((ar, i) => ({ id: "g-" + cur.key + "-" + (i + 1), ar, cap: cur.title + " " + (i + 1) })),
+      nextTitle: next.title,
+      nextKey: next.key,
+    };
+  }
+}
+</script>
+</body>
+</html>
