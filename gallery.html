@@ -26,39 +26,75 @@
   .genre-nav a{font-size:13px;text-decoration:none;padding:4px 12px;border:1px solid var(--color-divider);border-radius:var(--radius-md);color:var(--color-text);}
   .genre-nav a:hover{border-color:var(--color-accent);color:var(--color-accent-700);}
   .genre-nav a[aria-current]{border-color:var(--color-accent);color:var(--color-accent-700);}
+  @media(max-width:960px){.gal-title h1{font-size:48px !important;}}
   @media(max-width:640px){.masonry{flex-direction:column;}}
+  @media(max-width:600px){
+    .wrap{padding-left:var(--space-5);padding-right:var(--space-5);}
+    .display{font-size:34px !important;}
+    .gal-title{max-width:100% !important;}
+    .gal-count{text-align:left !important;}
+    nav.nav{flex-wrap:wrap;row-gap:var(--space-2);height:auto;padding-top:var(--space-3);padding-bottom:var(--space-3);}
+    nav.nav .nav-brand{flex-basis:100%;}
+  }
+  img{max-width:100%;}
 </style>
 <script>
 (function(){
-  var DICT={
-    "Work":"İşler","Services":"Hizmetler","About":"Hakkımda","Contact":"İletişim",
-    "← All collections":"← Tüm koleksiyonlar","Next":"Sıradaki","Book a session":"Seans ayırt",
-    "Like what you see?":"Beğendiniz mi?","Let's make something like this together":"Birlikte böyle bir şey yapalım",
-    "Portraits":"Portreler","Travel & Landscape":"Seyahat ve Manzara","Fashion & Editorial":"Moda ve Editoryal",
-    "Weddings & Events":"Düğünler ve Etkinlikler","Architecture & Interiors":"Mimari ve İç Mekân","Street & Documentary":"Sokak ve Belgesel",
-    "People, honestly lit. Studio and natural light sittings where the aim is simple — that you look like yourself on a really good day.":"İnsanlar, dürüst ışıkla. Amaç basit olan stüdyo ve doğal ışık çekimleri — çok iyi bir gününüzde kendiniz gibi görünmeniz.",
-    "Cities, coasts and quiet corners across Europe and Türkiye — the light of a place and the feeling of being there.":"Avrupa ve Türkiye'deki şehirler, kıyılar ve sessiz köşeler — bir yerin ışığı ve orada olma hissi.",
-    "Stories told with a look. Lookbooks, campaigns and magazine work built around a clear idea and a strong frame.":"Bir bakışla anlatılan hikâyeler. Net bir fikir ve güçlü bir kare üzerine kurulu lookbook, kampanya ve dergi çalışmaları.",
-    "Days worth keeping, photographed unhurried and up close — the big moments and the small ones between them.":"Saklı tutulmaya değer günler, telasız ve yakından çekilir — büyük anlar ve arasındaki küçük olanlar.",
-    "Space and structure — hotels, homes and buildings shot for their proportion, texture and the way light moves through them.":"Mekân ve yapı — oranları, dokuları ve içlerinden geçen ışığın hareketi için çekilen oteller, evler ve binalar.",
-    "Life exactly as it happens. Personal and commissioned reportage from the streets of Barcelona, İstanbul and beyond.":"Hayat tam olarak olduğu gibi. Barselona, İstanbul ve ötesinin sokaklarından kişisel ve sipariş üzerine röportaj fotoğrafçılığı."
+  var T={
+    "Work":{tr:"İşler",es:"Trabajo"},
+    "Services":{tr:"Hizmetler",es:"Servicios"},
+    "About":{tr:"Hakkımda",es:"Sobre mí"},
+    "Contact":{tr:"İletişim",es:"Contacto"},
+    "← All collections":{tr:"← Tüm koleksiyonlar",es:"← Todas las colecciones"},
+    "Next":{tr:"Sıradaki",es:"Siguiente"},
+    "Book a session":{tr:"Seans ayırt",es:"Reserva una sesión"},
+    "Like what you see?":{tr:"Beğendiniz mi?",es:"¿Te gusta lo que ves?"},
+    "Let's make something like this together":{tr:"Birlikte böyle bir şey yapalım",es:"Creemos algo así juntos"},
+    "Portfolio —":{tr:"Portföy —",es:"Portafolio —"},
+    "frames":{tr:"kare",es:"fotogramas"},
+    "Barcelona · Europe · Türkiye":{tr:"Barselona · Avrupa · Türkiye",es:"Barcelona · Europa · Turquía"},
+    "⤢ Expand":{tr:"⤢ Büyüt",es:"⤢ Ampliar"},
+    "View":{tr:"Gör",es:"Ver"},
+    "View Portraits →":{tr:"Portreleri gör →",es:"Ver retratos →"},
+    "View Travel & Landscape →":{tr:"Seyahat ve Manzara'yı gör →",es:"Ver viajes y paisaje →"},
+    "View Fashion & Editorial →":{tr:"Moda ve Editoryal'ı gör →",es:"Ver moda y editorial →"},
+    "View Weddings & Events →":{tr:"Düğünler ve Etkinlikler'i gör →",es:"Ver bodas y eventos →"},
+    "View Architecture & Interiors →":{tr:"Mimari ve İç Mekân'ı gör →",es:"Ver arquitectura e interiores →"},
+    "View Street & Documentary →":{tr:"Sokak ve Belgesel'i gör →",es:"Ver calle y documental →"},
+    "Portraits":{tr:"Portreler",es:"Retratos"},
+    "Travel & Landscape":{tr:"Seyahat ve Manzara",es:"Viajes y paisaje"},
+    "Fashion & Editorial":{tr:"Moda ve Editoryal",es:"Moda y editorial"},
+    "Weddings & Events":{tr:"Düğünler ve Etkinlikler",es:"Bodas y eventos"},
+    "Architecture & Interiors":{tr:"Mimari ve İç Mekân",es:"Arquitectura e interiores"},
+    "Street & Documentary":{tr:"Sokak ve Belgesel",es:"Calle y documental"},
+    "People, honestly lit. Studio and natural light sittings where the aim is simple — that you look like yourself on a really good day.":{tr:"İnsanlar, dürüst ışıkla. Amaç basit olan stüdyo ve doğal ışık çekimleri — çok iyi bir gününüzde kendiniz gibi görünmeniz.",es:"Personas, con luz honesta. Sesiones con luz de estudio y natural donde el objetivo es simple — que te parezcas a ti mismo en un día realmente bueno."},
+    "Cities, coasts and quiet corners across Europe and Türkiye — the light of a place and the feeling of being there.":{tr:"Avrupa ve Türkiye'deki şehirler, kıyılar ve sessiz köşeler — bir yerin ışığı ve orada olma hissi.",es:"Ciudades, costas y rincones tranquilos por Europa y Turquía — la luz de un lugar y la sensación de estar allí."},
+    "Stories told with a look. Lookbooks, campaigns and magazine work built around a clear idea and a strong frame.":{tr:"Bir bakışla anlatılan hikâyeler. Net bir fikir ve güçlü bir kare üzerine kurulu lookbook, kampanya ve dergi çalışmaları.",es:"Historias contadas con una mirada. Lookbooks, campañas y trabajo editorial construidos en torno a una idea clara y un encuadre potente."},
+    "Days worth keeping, photographed unhurried and up close — the big moments and the small ones between them.":{tr:"Saklı tutulmaya değer günler, telaşsız ve yakından çekilir — büyük anlar ve arasındaki küçük olanlar.",es:"Días que vale la pena guardar, fotografiados sin prisa y de cerca — los grandes momentos y los pequeños entre ellos."},
+    "Space and structure — hotels, homes and buildings shot for their proportion, texture and the way light moves through them.":{tr:"Mekân ve yapı — oranları, dokuları ve içlerinden geçen ışığın hareketi için çekilen oteller, evler ve binalar.",es:"Espacio y estructura — hoteles, casas y edificios fotografiados por su proporción, textura y la forma en que la luz los recorre."},
+    "Life exactly as it happens. Personal and commissioned reportage from the streets of Barcelona, İstanbul and beyond.":{tr:"Hayat tam olarak olduğu gibi. Barselona, İstanbul ve ötesinin sokaklarından kişisel ve sipariş üzerine röportaj fotoğrafçılığı.",es:"La vida tal como sucede. Reportaje personal y por encargo desde las calles de Barcelona, Estambul y más allá."},
+    "© 2026 Oğuzhan Gümüş · Barcelona · Photography":{tr:"© 2026 Oğuzhan Gümüş · Barselona · Fotoğrafçılık",es:"© 2026 Oğuzhan Gümüş · Barcelona · Fotografía"}
   };
-  function isLeaf(el){for(var i=0;i<el.childNodes.length;i++){if(el.childNodes[i].nodeType===1)return false;}return true;}
+  function norm(s){return (s||'').replace(/\s+/g,' ').trim();}
+  var ANY2EN={};
+  Object.keys(T).forEach(function(en){ANY2EN[norm(en)]=en;var e=T[en];for(var k in e){if(e[k])ANY2EN[norm(e[k])]=en;}});
+  function conv(text,lang){var key=norm(text);if(!key)return null;var en=ANY2EN[key];if(en===undefined)return null;return (lang==='en')?en:(T[en][lang]||en);}
+  function tnode(node,lang){var v=node.nodeValue;var out=conv(v,lang);if(out===null)return;var L=v.match(/^\s*/)[0],R=v.match(/\s*$/)[0];var nv=L+out+R;if(node.nodeValue!==nv)node.nodeValue=nv;}
   function apply(lang){
     document.documentElement.lang=lang;
-    document.querySelectorAll('h1,h2,h3,h4,h5,h6,p,a,span,label,button,td,figcaption,li').forEach(function(el){
-      if(el.hasAttribute('data-lang'))return;
-      if(!isLeaf(el))return;
-      var orig=el.getAttribute('data-en');
-      if(orig===null){orig=el.textContent.trim();if(!orig)return;el.setAttribute('data-en',orig);}
-      el.textContent=(lang==='tr'&&DICT[orig]!==undefined)?DICT[orig]:orig;
-    });
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode;if(!p)return 2;var t=p.nodeName;if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT')return 2;if(p.closest&&p.closest('[data-lang]'))return 2;if(!norm(n.nodeValue))return 2;return 1;}});
+    var arr=[],n;while(n=w.nextNode())arr.push(n);
+    arr.forEach(function(x){tnode(x,lang);});
+    document.querySelectorAll('[placeholder]').forEach(function(el){var out=conv(el.getAttribute('placeholder'),lang);if(out!==null)el.setAttribute('placeholder',out);});
     document.querySelectorAll('[data-lang]').forEach(function(b){if(b.getAttribute('data-lang')===lang)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
     try{localStorage.setItem('ozzy-lang',lang);}catch(e){}
   }
   document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(b){e.preventDefault();apply(b.getAttribute('data-lang'));}});
-  function init(){var l='en';try{l=localStorage.getItem('ozzy-lang')||'en';}catch(e){}apply(l);}
-  [150,600,1400].forEach(function(t){setTimeout(init,t);});
+  function cur(){var l='en';try{l=localStorage.getItem('ozzy-lang')||'en';}catch(e){}return l;}
+  [150,600,1400].forEach(function(t){setTimeout(function(){apply(cur());},t);});
+  var pend=false;
+  var mo=new MutationObserver(function(){if(pend)return;pend=true;setTimeout(function(){pend=false;if(cur()!=='en')apply(cur());},120);});
+  try{mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
 })();
 </script>
 <script>
@@ -84,18 +120,18 @@
     <a class="navlink" href="index.html#services">Services</a>
     <a class="navlink" href="index.html#about">About</a>
     <a class="navlink" href="index.html#contact">Contact</a>
-    <span style="display:inline-flex;gap:7px;align-items:center;font-size:12px;letter-spacing:.08em;"><a class="navlink" data-lang="en" href="#">EN</a><span class="text-muted">·</span><a class="navlink" data-lang="tr" href="#">TR</a></span>
+    <span style="display:inline-flex;gap:7px;align-items:center;font-size:12px;letter-spacing:.08em;"><a class="navlink" data-lang="en" href="#">EN</a><span class="text-muted">·</span><a class="navlink" data-lang="tr" href="#">TR</a><span class="text-muted">·</span><a class="navlink" data-lang="es" href="#">ES</a></span>
   </nav>
 
   <header class="wrap" style="padding-top:var(--space-8);padding-bottom:var(--space-6);">
     <a href="index.html#work" class="btn btn-ghost" style="padding-inline:0;margin-bottom:var(--space-3);">← All collections</a>
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-6);flex-wrap:wrap;">
-      <div style="max-width:60%;">
+      <div class="gal-title" style="max-width:60%;">
         <p class="kicker" style="margin:0 0 var(--space-3);">Portfolio — {{ index }} / 06</p>
         <h1 class="display" style="font-size:64px;margin:0 0 var(--space-4);">{{ title }}</h1>
         <p class="justify" style="font-size:16px;line-height:1.7;max-width:52ch;color:var(--color-neutral-800);margin:0;">{{ blurb }}</p>
       </div>
-      <p class="text-muted" style="font-size:13px;margin:0;text-align:right;">{{ count }} frames<br>Barcelona · Europe · Türkiye</p>
+      <p class="gal-count text-muted" style="font-size:13px;margin:0;text-align:right;">{{ count }} frames<br>Barcelona · Europe · Türkiye</p>
     </div>
     <hr class="hr" style="margin-top:var(--space-6);">
     <nav class="genre-nav">
@@ -129,7 +165,7 @@
         <p class="kicker" style="margin:0 0 var(--space-2);">Next</p>
         <h2 class="display" style="font-size:34px;margin:0;">{{ nextTitle }}</h2>
       </div>
-      <a class="btn btn-secondary" href="?g={{ nextKey }}">View {{ nextTitle }} →</a>
+      <a class="btn btn-secondary" href="?g={{ nextKey }}">{{ viewLabel }}</a>
     </div>
   </section>
 
@@ -177,6 +213,26 @@ class Component extends DCLogic {
         { src: "images/portraits-8.jpg", ar: "1.5" },
         { src: "images/portraits-9.jpg", ar: "1.5" },
       ],
+      travel: [
+        { src: "images/travel-1.jpg", ar: "1.5" },
+        { src: "images/travel-2.jpg", ar: "1.5" },
+        { src: "images/travel-3.jpg", ar: "1.5" },
+      ],
+      street: [
+        { src: "images/street-1.jpg", ar: "0.8" },
+        { src: "images/street-2.jpg", ar: "0.8" },
+        { src: "images/street-3.jpg", ar: "0.8" },
+        { src: "images/street-4.jpg", ar: "0.8" },
+      ],
+      architecture: [
+        { src: "images/architecture-1.jpg", ar: "1.5" },
+        { src: "images/architecture-2.jpg", ar: "1.5" },
+        { src: "images/architecture-3.jpg", ar: "0.667" },
+        { src: "images/architecture-4.jpg", ar: "0.667" },
+        { src: "images/architecture-5.jpg", ar: "0.667" },
+        { src: "images/architecture-6.jpg", ar: "0.667" },
+        { src: "images/architecture-7.jpg", ar: "1" },
+      ],
     };
     let key = "portraits";
     try { key = new URLSearchParams(location.search).get("g") || "portraits"; } catch (e) {}
@@ -213,6 +269,7 @@ class Component extends DCLogic {
       columns,
       nextTitle: next.title,
       nextKey: next.key,
+      viewLabel: "View " + next.title + " →",
     };
   }
 }

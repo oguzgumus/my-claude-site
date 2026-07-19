@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://w.behold.so/widget.js" type="module"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -18,51 +19,138 @@
   .display{font-family:var(--font-heading);font-weight:400;line-height:.98;letter-spacing:-.02em;}
   .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6) var(--space-4);}
   .ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-2);}
+  .ig-embed behold-widget{--behold-gap:var(--space-2);--behold-row-gap:var(--space-2);--behold-radius:0;display:block;}
+  .iglink{display:block;transition:opacity .25s ease;}
+  .iglink:hover{opacity:.82;}
   .justify{text-align:justify;hyphens:auto;}
   .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);}
   .tmg{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-6);}
+  @media(max-width:960px){
+    .hero-grid{grid-template-columns:1fr !important;gap:var(--space-6) !important;}
+    .hero-grid figure{max-width:420px;order:-1;}
+    .hero-grid h1{font-size:60px !important;}
+    .about-grid{grid-template-columns:1fr !important;gap:var(--space-6) !important;}
+    .about-grid figure{max-width:340px;}
+    .contact-grid{grid-template-columns:1fr !important;}
+  }
   @media(max-width:820px){.gallery-grid{grid-template-columns:repeat(2,1fr);}.ig-grid{grid-template-columns:repeat(3,1fr);}.price-grid{grid-template-columns:repeat(2,1fr);}.tmg{grid-template-columns:1fr;}}
+  @media(max-width:600px){
+    .wrap{padding-left:var(--space-5);padding-right:var(--space-5);}
+    .display{font-size:34px !important;}
+    .hero-grid h1{font-size:48px !important;}
+    .about-cols{column-count:1 !important;}
+    .form-row{grid-template-columns:1fr !important;}
+    .sec-head,.ig-head{flex-direction:column;align-items:flex-start !important;gap:var(--space-3);}
+    .gallery-grid{grid-template-columns:1fr;}
+    .price-grid{grid-template-columns:1fr;}
+    .ig-grid{grid-template-columns:repeat(2,1fr);}
+    nav.nav{flex-wrap:wrap;row-gap:var(--space-2);height:auto;padding-top:var(--space-3);padding-bottom:var(--space-3);}
+    nav.nav .nav-brand{flex-basis:100%;}
+  }
+  img{max-width:100%;}
 </style>
 <script>
 (function(){
-  var DICT={
-    "Photographer — Barcelona":"Fotoğrafçı — Barselona",
-    "Work":"İşler","Services":"Hizmetler","About":"Hakkımda","Contact":"İletişim",
-    "Book a session":"Seans ayırt","See selected work →":"Seçili işleri gör →",
-    "Selected Work":"Seçili İşler","Six ways of seeing":"Görmenin altı yolu",
-    "Services & Pricing":"Hizmetler ve Fiyatlar","How we can work together":"Nasıl birlikte çalışabiliriz",
-    "Kind Words":"Güzel Sözler","From the people I've worked with":"Birlikte çalıştığım insanlardan",
-    "Latest from the feed":"Akıştan son kareler","Follow on Instagram":"Instagram'da takip et",
-    "Let's make something together":"Birlikte bir şeyler yapalım","Hello, I'm Ozzy":"Merhaba, ben Ozzy",
-    "Portraits":"Portreler","Travel & Landscape":"Seyahat ve Manzara","Fashion & Editorial":"Moda ve Editoryal",
-    "Weddings & Events":"Düğünler ve Etkinlikler","Architecture & Interiors":"Mimari ve İç Mekân","Street & Documentary":"Sokak ve Belgesel",
-    "Editorial & Brand":"Editoryal ve Marka","Travel & Destination":"Seyahat ve Destinasyon",
-    "People, honestly lit":"İnsanlar, dürüst ışıkla","Cities, coasts, light":"Şehirler, kıyılar, ışık","Stories with a look":"Bir bakışla anlatılan hikâyeler",
-    "Days worth keeping":"Saklı tutulmaya değer günler","Space & structure":"Mekân ve yapı","Life as it happens":"Hayat olduğu gibi",
-    "· View →":"· Gör →","On request":"Talep üzerine","Let's plan it together":"Birlikte planlayalım",
-    "Individuals · Families · Headshots":"Bireyler · Aileler · Vesikalık","Brands · Agencies · Hospitality":"Markalar · Ajanslar · Ağırlama",
-    "Couples · Celebrations":"Çiftler · Kutlamalar",
-    "Name":"İsim","Email":"E-posta","Project type":"Proje türü","Preferred dates":"Tercih edilen tarihler","Tell me about it":"Bana anlat","Send enquiry":"Talep gönder",
-    "Based in":"Konum","Traveling to":"Seyahat","Barcelona, Spain":"Barselona, İspanya","Europe & Türkiye":"Avrupa ve Türkiye",
-    "Barcelona":"Barselona","Europe":"Avrupa","Türkiye":"Türkiye",
-    "Like what you see?":"Beğendiniz mi?"
+  var T={
+    "Work":{tr:"İşler",es:"Trabajo"},
+    "Services":{tr:"Hizmetler",es:"Servicios"},
+    "About":{tr:"Hakkımda",es:"Sobre mí"},
+    "Contact":{tr:"İletişim",es:"Contacto"},
+    "Book a session":{tr:"Seans ayırt",es:"Reserva una sesión"},
+    "See selected work →":{tr:"Seçili işleri gör →",es:"Ver trabajo seleccionado →"},
+    "Photographer — Barcelona":{tr:"Fotoğrafçı — Barselona",es:"Fotógrafo — Barcelona"},
+    "Portraits, travel & editorial photography for people and brands — made with warmth and an eye for quiet detail, across Barcelona, Europe & Türkiye.":{tr:"İnsanlar ve markalar için portre, seyahat ve editoryal fotoğrafçılık — Barselona, Avrupa ve Türkiye'de sıcaklıkla ve sessiz ayrıntılara dikkatle yapılır.",es:"Fotografía de retrato, viajes y editorial para personas y marcas — hecha con calidez y atención al detalle discreto, en Barcelona, Europa y Turquía."},
+    "Selected Work":{tr:"Seçili İşler",es:"Trabajo seleccionado"},
+    "Six ways of seeing":{tr:"Görmenin altı yolu",es:"Seis maneras de ver"},
+    "A working portfolio, refreshed between commissions. Each collection is a plate — click a frame to see the full set.":{tr:"İşler arasında güncellenen, çalışan bir portföy. Her koleksiyon bir plaka — tüm seriyi görmek için bir kareye tıklayın.",es:"Un portafolio vivo, actualizado entre encargos. Cada colección es una lámina — haz clic en un cuadro para ver la serie completa."},
+    "Portraits":{tr:"Portreler",es:"Retratos"},
+    "Travel & Landscape":{tr:"Seyahat ve Manzara",es:"Viajes y paisaje"},
+    "Fashion & Editorial":{tr:"Moda ve Editoryal",es:"Moda y editorial"},
+    "Weddings & Events":{tr:"Düğünler ve Etkinlikler",es:"Bodas y eventos"},
+    "Architecture & Interiors":{tr:"Mimari ve İç Mekân",es:"Arquitectura e interiores"},
+    "Street & Documentary":{tr:"Sokak ve Belgesel",es:"Calle y documental"},
+    "Editorial & Brand":{tr:"Editoryal ve Marka",es:"Editorial y marca"},
+    "Travel & Destination":{tr:"Seyahat ve Destinasyon",es:"Viajes y destinos"},
+    "People, honestly lit":{tr:"İnsanlar, dürüst ışıkla",es:"Personas, con luz honesta"},
+    "Cities, coasts, light":{tr:"Şehirler, kıyılar, ışık",es:"Ciudades, costas, luz"},
+    "Stories with a look":{tr:"Bir bakışla anlatılan hikâyeler",es:"Historias con una mirada"},
+    "Days worth keeping":{tr:"Saklı tutulmaya değer günler",es:"Días que vale la pena guardar"},
+    "Space & structure":{tr:"Mekân ve yapı",es:"Espacio y estructura"},
+    "Life as it happens":{tr:"Hayat olduğu gibi",es:"La vida tal como sucede"},
+    "· View →":{tr:"· Gör →",es:"· Ver →"},
+    "Services & Pricing":{tr:"Hizmetler ve Fiyatlar",es:"Servicios y precios"},
+    "How we can work together":{tr:"Nasıl birlikte çalışabiliriz",es:"Cómo podemos trabajar juntos"},
+    "Starting points, not fixed menus — every commission is quoted to the brief. Travel beyond Barcelona is added at cost, whether that's elsewhere in Europe or back home in Türkiye.":{tr:"Sabit menüler değil, başlangıç noktaları — her iş, brief'e göre fiyatlandırılır. Barselona dışına seyahat, ister Avrupa'nın başka bir yeri ister Türkiye'ye dönüş olsun, maliyetine eklenir.",es:"Puntos de partida, no menús fijos — cada encargo se presupuesta según el brief. Los viajes fuera de Barcelona se añaden a coste, ya sea a otro lugar de Europa o de vuelta a Turquía."},
+    "from €280":{tr:"€280'den",es:"desde €280"},
+    "from €650":{tr:"€650'den",es:"desde €650"},
+    "from €1,600":{tr:"€1,600'den",es:"desde €1.600"},
+    "On request":{tr:"Talep üzerine",es:"Bajo petición"},
+    "A relaxed 1–2 hour session, one location, and 25+ hand-edited images delivered within two weeks.":{tr:"Rahat 1–2 saatlik bir çekim, tek mekân ve iki hafta içinde teslim edilen 25+ elle düzenlenmiş görsel.",es:"Una sesión relajada de 1–2 horas, una localización y más de 25 imágenes editadas a mano entregadas en dos semanas."},
+    "Half-day shoot to an agreed shot list, commercial usage license, and a full gallery of edited images.":{tr:"Üzerinde anlaşılan çekim listesine göre yarım günlük çekim, ticari kullanım lisansı ve düzenlenmiş görsellerden oluşan tam bir galeri.",es:"Sesión de medio día según una lista de tomas acordada, licencia de uso comercial y una galería completa de imágenes editadas."},
+    "Full-day coverage with an optional second shooter, a private online gallery, and print-ready files.":{tr:"İsteğe bağlı ikinci bir fotoğrafçıyla tam gün çekim, özel çevrimiçi galeri ve baskıya hazır dosyalar.",es:"Cobertura de día completo con segundo fotógrafo opcional, galería privada en línea y archivos listos para imprimir."},
+    "Multi-day rates for destination weddings, campaigns and travel stories across Europe & Türkiye.":{tr:"Avrupa ve Türkiye genelinde destinasyon düğünleri, kampanyalar ve seyahat hikâyeleri için çok günlük ücretler.",es:"Tarifas de varios días para bodas de destino, campañas e historias de viaje por Europa y Turquía."},
+    "Individuals · Families · Headshots":{tr:"Bireyler · Aileler · Vesikalık",es:"Individuos · Familias · Retratos profesionales"},
+    "Brands · Agencies · Hospitality":{tr:"Markalar · Ajanslar · Ağırlama",es:"Marcas · Agencias · Hostelería"},
+    "Couples · Celebrations":{tr:"Çiftler · Kutlamalar",es:"Parejas · Celebraciones"},
+    "Let's plan it together":{tr:"Birlikte planlayalım",es:"Planifiquémoslo juntos"},
+    "Prices in EUR, excl. VAT. Deposits secure the date; balance on delivery.":{tr:"Fiyatlar EUR, KDV hariç. Kaporalar tarihi güvenceye alır; bakiye teslimde ödenir.",es:"Precios en EUR, sin IVA. El depósito reserva la fecha; el resto se paga en la entrega."},
+    "Ask for a tailored quote →":{tr:"Size özel teklif isteyin →",es:"Pide un presupuesto a medida →"},
+    "Hello, I'm Ozzy":{tr:"Merhaba, ben Ozzy",es:"Hola, soy Ozzy"},
+    "My name is Oğuzhan Gümüş — most people just call me Ozzy. I'm a photographer based in Barcelona, working in portraits, travel and editorial photography for private clients and brands alike.":{tr:"Adım Oğuzhan Gümüş — çoğu kişi bana kısaca Ozzy der. Barselona merkezli bir fotoğrafçıyım; hem özel müşteriler hem de markalar için portre, seyahat ve editoryal fotoğrafçılık yapıyorum.",es:"Me llamo Oğuzhan Gümüş — la mayoría me llama simplemente Ozzy. Soy fotógrafo afincado en Barcelona y trabajo en retrato, viajes y fotografía editorial tanto para clientes privados como para marcas."},
+    "I grew up in Türkiye and still shoot there often, so I move easily between Barcelona, the rest of Europe and back home. My approach is warm and unhurried: I want the people and places I photograph to look like themselves on their best day.":{tr:"Türkiye'de büyüdüm ve hâlâ orada sık sık çekim yapıyorum; bu yüzden Barselona, Avrupa'nın geri kalanı ve memleketim arasında rahatça hareket ediyorum. Yaklaşımım sıcak ve telaşsız: Fotoğrafladığım insanların ve mekânların en iyi günlerindeki hâlleriyle görünmelerini istiyorum.",es:"Crecí en Turquía y todavía fotografío allí a menudo, así que me muevo con facilidad entre Barcelona, el resto de Europa y mi tierra. Mi enfoque es cálido y sin prisas: quiero que las personas y los lugares que fotografío se vean como ellos mismos en su mejor día."},
+    "Available for commissions and collaborations. I work in English, Spanish and Turkish — reach out in whichever feels natural.":{tr:"Çekimler ve iş birlikleri için müsaitim. İngilizce, İspanyolca ve Türkçe çalışıyorum — hangisi doğal geliyorsa onunla ulaşın.",es:"Disponible para encargos y colaboraciones. Trabajo en inglés, español y turco — escríbeme en el que te resulte más natural."},
+    "Barcelona":{tr:"Barselona",es:"Barcelona"},
+    "Europe":{tr:"Avrupa",es:"Europa"},
+    "Türkiye":{tr:"Türkiye",es:"Turquía"},
+    "Kind Words":{tr:"Güzel Sözler",es:"Palabras amables"},
+    "From the people I've worked with":{tr:"Birlikte çalıştığım insanlardan",es:"De las personas con las que he trabajado"},
+    "“Ozzy made a camera-shy couple feel completely at ease — the photos look like us on our happiest day.”":{tr:"“Ozzy, kameradan çekinen bir çifti tamamen rahatlattı — fotoğraflar en mutlu günümüzdeki hâlimize benziyor.”",es:"“Ozzy hizo que una pareja tímida ante la cámara se sintiera totalmente cómoda — las fotos se parecen a nosotros en nuestro día más feliz.”"},
+    "Marta & Jordi · Wedding, Girona":{tr:"Marta & Jordi · Düğün, Girona",es:"Marta y Jordi · Boda, Girona"},
+    "“Our brand shoot finally looks like the company we actually are — warm, sharp, and delivered early.”":{tr:"“Marka çekimimiz nihayet gerçekten olduğumuz şirkete benziyor — sıcak, keskin ve erken teslim edildi.”",es:"“Nuestra sesión de marca por fin se parece a la empresa que realmente somos — cálida, nítida y entregada antes de tiempo.”"},
+    "Elif K. · Founder, Atölye — İstanbul":{tr:"Elif K. · Kurucu, Atölye — İstanbul",es:"Elif K. · Fundadora, Atölye — Estambul"},
+    "“Working across two cities was effortless. He sees light the way the rest of us wish we could.”":{tr:"“İki şehirde çalışmak çok kolaydı. Işığı, geri kalanımızın görmek isteyeceği şekilde görüyor.”",es:"“Trabajar entre dos ciudades fue muy fácil. Ve la luz como el resto de nosotros desearía poder verla.”"},
+    "Daniel R. · Creative Director, Barcelona":{tr:"Daniel R. · Kreatif Direktör, Barselona",es:"Daniel R. · Director creativo, Barcelona"},
+    "Latest from the feed":{tr:"Akıştan son kareler",es:"Lo último del feed"},
+    "Follow on Instagram":{tr:"Instagram'da takip et",es:"Sígueme en Instagram"},
+    "Let's make something together":{tr:"Birlikte bir şeyler yapalım",es:"Creemos algo juntos"},
+    "Tell me a little about your project — a portrait sitting, a trip, an editorial, a wedding. I'll reply within a couple of days with availability and a quote.":{tr:"Projeniz hakkında biraz bilgi verin — bir portre çekimi, bir gezi, bir editoryal, bir düğün. Birkaç gün içinde müsaitlik ve fiyat teklifiyle yanıt vereceğim.",es:"Cuéntame un poco sobre tu proyecto — una sesión de retrato, un viaje, un editorial, una boda. Te responderé en un par de días con disponibilidad y presupuesto."},
+    "Email":{tr:"E-posta",es:"Correo"},
+    "Based in":{tr:"Konum",es:"Ubicación"},
+    "Traveling to":{tr:"Seyahat",es:"Viaja a"},
+    "Barcelona, Spain":{tr:"Barselona, İspanya",es:"Barcelona, España"},
+    "Europe & Türkiye":{tr:"Avrupa ve Türkiye",es:"Europa y Turquía"},
+    "Name":{tr:"İsim",es:"Nombre"},
+    "Project type":{tr:"Proje türü",es:"Tipo de proyecto"},
+    "Preferred dates":{tr:"Tercih edilen tarihler",es:"Fechas preferidas"},
+    "Tell me about it":{tr:"Bana anlat",es:"Cuéntame"},
+    "Send enquiry":{tr:"Talep gönder",es:"Enviar consulta"},
+    "Your name":{tr:"Adınız",es:"Tu nombre"},
+    "Portrait · Travel · Editorial · Wedding…":{tr:"Portre · Seyahat · Editoryal · Düğün…",es:"Retrato · Viajes · Editorial · Boda…"},
+    "e.g. late September, Barcelona":{tr:"örn. eylül sonu, Barselona",es:"p. ej. finales de septiembre, Barcelona"},
+    "A few lines about what you have in mind":{tr:"Aklınızdakiler hakkında birkaç satır",es:"Unas líneas sobre lo que tienes en mente"},
+    "© 2026 Oğuzhan Gümüş · Barcelona · Photography":{tr:"© 2026 Oğuzhan Gümüş · Barselona · Fotoğrafçılık",es:"© 2026 Oğuzhan Gümüş · Barcelona · Fotografía"},
+    "Like what you see?":{tr:"Beğendiniz mi?",es:"¿Te gusta lo que ves?"}
   };
-  function isLeaf(el){for(var i=0;i<el.childNodes.length;i++){if(el.childNodes[i].nodeType===1)return false;}return true;}
+  function norm(s){return (s||'').replace(/\s+/g,' ').trim();}
+  var ANY2EN={};
+  Object.keys(T).forEach(function(en){ANY2EN[norm(en)]=en;var e=T[en];for(var k in e){if(e[k])ANY2EN[norm(e[k])]=en;}});
+  function conv(text,lang){var key=norm(text);if(!key)return null;var en=ANY2EN[key];if(en===undefined)return null;return (lang==='en')?en:(T[en][lang]||en);}
+  function tnode(node,lang){var v=node.nodeValue;var out=conv(v,lang);if(out===null)return;var L=v.match(/^\s*/)[0],R=v.match(/\s*$/)[0];var nv=L+out+R;if(node.nodeValue!==nv)node.nodeValue=nv;}
   function apply(lang){
     document.documentElement.lang=lang;
-    document.querySelectorAll('h1,h2,h3,h4,h5,h6,p,a,span,label,button,td,figcaption,li').forEach(function(el){
-      if(el.hasAttribute('data-lang'))return;
-      if(!isLeaf(el))return;
-      var orig=el.getAttribute('data-en');
-      if(orig===null){orig=el.textContent.trim();if(!orig)return;el.setAttribute('data-en',orig);}
-      el.textContent=(lang==='tr'&&DICT[orig]!==undefined)?DICT[orig]:orig;
-    });
+    var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode;if(!p)return 2;var t=p.nodeName;if(t==='SCRIPT'||t==='STYLE'||t==='NOSCRIPT')return 2;if(p.closest&&p.closest('[data-lang]'))return 2;if(!norm(n.nodeValue))return 2;return 1;}});
+    var arr=[],n;while(n=w.nextNode())arr.push(n);
+    arr.forEach(function(x){tnode(x,lang);});
+    document.querySelectorAll('[placeholder]').forEach(function(el){var out=conv(el.getAttribute('placeholder'),lang);if(out!==null)el.setAttribute('placeholder',out);});
     document.querySelectorAll('[data-lang]').forEach(function(b){if(b.getAttribute('data-lang')===lang)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
     try{localStorage.setItem('ozzy-lang',lang);}catch(e){}
   }
   document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-lang]');if(b){e.preventDefault();apply(b.getAttribute('data-lang'));}});
-  function init(){var l='en';try{l=localStorage.getItem('ozzy-lang')||'en';}catch(e){}apply(l);}
-  [150,600,1400].forEach(function(t){setTimeout(init,t);});
+  function cur(){var l='en';try{l=localStorage.getItem('ozzy-lang')||'en';}catch(e){}return l;}
+  [150,600,1400].forEach(function(t){setTimeout(function(){apply(cur());},t);});
+  var pend=false;
+  var mo=new MutationObserver(function(){if(pend)return;pend=true;setTimeout(function(){pend=false;if(cur()!=='en')apply(cur());},120);});
+  try{mo.observe(document.body,{childList:true,subtree:true});}catch(e){}
 })();
 </script>
 </helmet>
@@ -75,11 +163,11 @@
     <a class="navlink" href="#about">About</a>
     <a class="navlink" href="#instagram">Instagram</a>
     <a class="navlink" href="#contact">Contact</a>
-    <span style="display:inline-flex;gap:7px;align-items:center;font-size:12px;letter-spacing:.08em;"><a class="navlink" data-lang="en" href="#">EN</a><span class="text-muted">·</span><a class="navlink" data-lang="tr" href="#">TR</a></span>
+    <span style="display:inline-flex;gap:7px;align-items:center;font-size:12px;letter-spacing:.08em;"><a class="navlink" data-lang="en" href="#">EN</a><span class="text-muted">·</span><a class="navlink" data-lang="tr" href="#">TR</a><span class="text-muted">·</span><a class="navlink" data-lang="es" href="#">ES</a></span>
   </nav>
 
   <header class="wrap" style="padding-top:var(--space-8);padding-bottom:var(--space-8);">
-    <div style="display:grid;grid-template-columns:1.05fr .95fr;gap:var(--space-8);align-items:center;">
+    <div class="hero-grid" style="display:grid;grid-template-columns:1.05fr .95fr;gap:var(--space-8);align-items:center;">
       <div>
         <p class="kicker" style="margin:0 0 var(--space-4);">Photographer — Barcelona</p>
         <h1 class="display" style="font-size:76px;margin:0 0 var(--space-4);">Ozzy<br>Gumush</h1>
@@ -101,7 +189,7 @@
   <div class="wrap"><hr class="hr"></div>
 
   <section id="work" class="wrap" style="padding-top:var(--space-8);">
-    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-6);">
+    <div class="sec-head" style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-6);">
       <div>
         <p class="kicker" style="margin:0 0 var(--space-2);">Selected Work</p>
         <h2 class="display" style="font-size:40px;margin:0;">Six ways of seeing</h2>
@@ -113,18 +201,18 @@
     </div>
     <div class="gallery-grid">
       <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g1" shape="rect" src="images/portraits-3.jpg" placeholder="Portraits"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=portraits" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Portraits</span></a><br><span class="text-muted" style="font-size:13px;">People, honestly lit</span> <a class="btn btn-ghost" href="gallery.html?g=portraits" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
-      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g2" shape="rect" placeholder="Travel & Landscape"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=travel" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Travel &amp; Landscape</span></a><br><span class="text-muted" style="font-size:13px;">Cities, coasts, light</span> <a class="btn btn-ghost" href="gallery.html?g=travel" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
+      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g2" shape="rect" src="images/travel-1.jpg" placeholder="Travel & Landscape"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=travel" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Travel &amp; Landscape</span></a><br><span class="text-muted" style="font-size:13px;">Cities, coasts, light</span> <a class="btn btn-ghost" href="gallery.html?g=travel" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
       <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g3" shape="rect" placeholder="Fashion & Editorial"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=fashion" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Fashion &amp; Editorial</span></a><br><span class="text-muted" style="font-size:13px;">Stories with a look</span> <a class="btn btn-ghost" href="gallery.html?g=fashion" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
       <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g4" shape="rect" placeholder="Weddings & Events"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=weddings" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Weddings &amp; Events</span></a><br><span class="text-muted" style="font-size:13px;">Days worth keeping</span> <a class="btn btn-ghost" href="gallery.html?g=weddings" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
-      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g5" shape="rect" placeholder="Architecture & Interiors"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=architecture" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Architecture &amp; Interiors</span></a><br><span class="text-muted" style="font-size:13px;">Space &amp; structure</span> <a class="btn btn-ghost" href="gallery.html?g=architecture" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
-      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g6" shape="rect" placeholder="Street & Documentary"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=street" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Street &amp; Documentary</span></a><br><span class="text-muted" style="font-size:13px;">Life as it happens</span> <a class="btn btn-ghost" href="gallery.html?g=street" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
+      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g5" shape="rect" src="images/architecture-1.jpg" placeholder="Architecture & Interiors"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=architecture" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Architecture &amp; Interiors</span></a><br><span class="text-muted" style="font-size:13px;">Space &amp; structure</span> <a class="btn btn-ghost" href="gallery.html?g=architecture" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
+      <figure><div class="plate" style="aspect-ratio:4/5;"><image-slot id="cl-g6" shape="rect" src="images/street-1.jpg" placeholder="Street & Documentary"></image-slot></div><figcaption style="margin-top:var(--space-2);"><a href="gallery.html?g=street" style="text-decoration:none;color:inherit;"><span class="card-title" style="font-size:19px;">Street &amp; Documentary</span></a><br><span class="text-muted" style="font-size:13px;">Life as it happens</span> <a class="btn btn-ghost" href="gallery.html?g=street" style="padding-inline:0;font-size:13px;">· View →</a></figcaption></figure>
     </div>
   </section>
 
   <div class="wrap" style="padding-top:var(--space-8);"><hr class="hr"></div>
 
   <section id="services" class="wrap" style="padding-top:var(--space-8);">
-    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-6);">
+    <div class="sec-head" style="display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-6);">
       <div>
         <p class="kicker" style="margin:0 0 var(--space-2);">Services &amp; Pricing</p>
         <h2 class="display" style="font-size:40px;margin:0;">How we can work together</h2>
@@ -174,12 +262,12 @@
   <div class="wrap" style="padding-top:var(--space-8);"><hr class="hr"></div>
 
   <section id="about" class="wrap" style="padding-top:var(--space-8);">
-    <div style="display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--space-8);align-items:start;">
-      <figure class="plate" style="aspect-ratio:3/4;"><image-slot id="cl-about" shape="rect" placeholder="Drop portrait of Ozzy"></image-slot></figure>
+    <div class="about-grid" style="display:grid;grid-template-columns:.85fr 1.15fr;gap:var(--space-8);align-items:start;">
+      <figure class="plate" style="aspect-ratio:3/4;"><image-slot id="cl-about" shape="rect" src="images/about.jpg" placeholder="Drop portrait of Ozzy"></image-slot></figure>
       <div>
         <p class="kicker" style="margin:0 0 var(--space-3);">About</p>
         <h2 class="display" style="font-size:40px;margin:0 0 var(--space-4);">Hello, I'm Ozzy</h2>
-        <div style="column-count:2;column-gap:var(--space-6);">
+        <div class="about-cols" style="column-count:2;column-gap:var(--space-6);">
           <p class="justify" style="font-size:15px;line-height:1.75;">
             My name is Oğuzhan Gümüş — most people just call me Ozzy. I'm a photographer based in
             Barcelona, working in portraits, travel and editorial photography for private clients
@@ -191,7 +279,7 @@
             and places I photograph to look like themselves on their best day.
           </p>
           <p class="justify" style="font-size:15px;line-height:1.75;">
-            Available for commissions and collaborations. I work in English and Turkish — reach out
+            Available for commissions and collaborations. I work in English, Spanish and Turkish — reach out
             in whichever feels natural.
           </p>
         </div>
@@ -199,7 +287,7 @@
           <span class="tag tag-outline">Barcelona</span>
           <span class="tag tag-outline">Europe</span>
           <span class="tag tag-outline">Türkiye</span>
-          <span class="tag tag-neutral">EN · TR</span>
+          <span class="tag tag-neutral">EN · ES · TR</span>
         </div>
       </div>
     </div>
@@ -229,24 +317,20 @@
   <div class="wrap" style="padding-top:var(--space-8);"><hr class="hr"></div>
 
   <section id="instagram" class="wrap" style="padding-top:var(--space-8);">
-    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-4);">
+    <div class="ig-head" style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-4);">
       <div><p class="kicker" style="margin:0 0 var(--space-2);">Latest from the feed</p><h2 class="display" style="font-size:34px;margin:0;">@photosofog</h2></div>
       <a class="btn btn-secondary" href="https://instagram.com/photosofog" target="_blank" rel="noopener">Follow on Instagram</a>
     </div>
-    <div class="ig-grid">
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig1" shape="rect" placeholder="IG"></image-slot></div>
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig2" shape="rect" placeholder="IG"></image-slot></div>
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig3" shape="rect" placeholder="IG"></image-slot></div>
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig4" shape="rect" placeholder="IG"></image-slot></div>
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig5" shape="rect" placeholder="IG"></image-slot></div>
-      <div class="plate" style="aspect-ratio:1;"><image-slot id="cl-ig6" shape="rect" placeholder="IG"></image-slot></div>
+    <div class="ig-embed">
+      <behold-widget feed-id="JuS5sDTadtImWbdippUy"></behold-widget>
     </div>
+    <noscript><p class="text-muted" style="font-size:13px;">View the latest posts on <a href="https://instagram.com/photosofog" target="_blank" rel="noopener">Instagram</a>.</p></noscript>
   </section>
 
   <div class="wrap" style="padding-top:var(--space-8);"><hr class="hr"></div>
 
   <section id="contact" class="wrap" style="padding-top:var(--space-8);">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:start;">
+    <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:start;">
       <div>
         <p class="kicker" style="margin:0 0 var(--space-3);">Contact</p>
         <h2 class="display" style="font-size:44px;margin:0 0 var(--space-4);">Let's make something together</h2>
@@ -265,7 +349,7 @@
         </table>
       </div>
       <form class="card" style="padding:var(--space-6);gap:var(--space-4);" onSubmit="{{ onSubmit }}">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+        <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
           <div class="field"><label>Name</label><input class="input" type="text" placeholder="Your name"></div>
           <div class="field"><label>Email</label><input class="input" type="email" placeholder="you@email.com"></div>
         </div>
